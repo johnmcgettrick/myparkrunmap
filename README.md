@@ -13,7 +13,9 @@ A React web app that displays a map with all the parkruns you've completed.
 
 ## Adding Your parkrun Data
 
-Add your parkrun history `src/data/myParkruns.json` to:
+Grab your parkrun data from your athlete history page: https://www.parkrun.org.uk/results/athleteresultshistory/?athleteNumber=xxxxxx.
+
+Add your parkrun history to `src/data/myParkruns.json`:
 
 ```javascript
 [

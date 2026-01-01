@@ -13,22 +13,13 @@ A React web app that displays a map with all the parkruns you've completed.
 
 ## Adding Your parkrun Data
 
-Grab your parkrun data from your athlete history page: https://www.parkrun.org.uk/results/athleteresultshistory/?athleteNumber=xxxxxx.
+Grab your parkrun data from your athlete history page: https://www.parkrun.org.uk/results/athleteresultshistory/?athleteNumber=xxxxxx. You should have a link to this from one of your Parkrun results emails.
 
-Add your parkrun history to `src/data/myParkruns.json`:
+Add your parkrun history to `src/data/myParkruns.json.tmp`.
 
-```javascript
-[
-  { "name": "Whitley Bay parkrun", "eventCode": "whitleybay", "runs": 15, "bestTime": "20:07", "country": "EN" },
-  { "name": "Blyth Links parkrun", "eventCode": "blyth-links", "runs": 3, "bestTime": "19:32", "country": "EN" }
-]
-```
+Add your parkrun locations to `src/data/parkrunLocations.json.tmp`.
 
-Add your parkrun locations to `src/data/parkrunLocations.js`:
-
-```javascript
-"event-name": { name: "Display Name", lat: 51.5074, lng: -0.1278 },
-```
+Rename both to remove the `.tmp` extension.
 
 ## Features
 

@@ -1,0 +1,4 @@
+[
+  { "name": "Whitley Bay parkrun", "eventCode": "whitleybay", "runs": 15, "bestTime": "20:07", "country": "EN" },
+  { "name": "Blyth Links parkrun", "eventCode": "blyth-links", "runs": 3, "bestTime": "19:32", "country": "EN" }
+]

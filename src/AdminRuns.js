@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { loadRuns, saveRuns } from "./utils/dataStore";
 
-export default function Admin() {
+export default function AdminRuns() {
   const [runs, setRuns] = useState(loadRuns());
   const [form, setForm] = useState({
     name: "",

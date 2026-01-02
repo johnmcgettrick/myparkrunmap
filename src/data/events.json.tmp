@@ -1,0 +1,20 @@
+[
+  { 
+    "name": "Whitley Bay parkrun", 
+    "eventCode": "whitleybay",
+    "lat": 55.048,
+    "lng": -1.447, 
+    "runs": 15, 
+    "bestTime": "20:07", 
+    "country": "EN" 
+  },
+  { 
+    "name": "Blyth Links parkrun", 
+    "eventCode": "blyth-links", 
+    "lat": 55.116,
+    "lng": -1.508,
+    "runs": 3, 
+    "bestTime": "19:32", 
+    "country": "EN" 
+  }
+]

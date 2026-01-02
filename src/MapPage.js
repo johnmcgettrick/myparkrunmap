@@ -1,17 +1,10 @@
-import React, { useMemo } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import L from 'leaflet';
-import './App.css';
-import { loadRuns, loadLocations } from './utils/dataStore';
-import { flagMap } from './flagMap';
-
-// Fix for default marker icons in React-Leaflet
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-  iconUrl: require('leaflet/dist/images/marker-icon.png'),
-  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
-});
+// MapPage.js
+import React, { useMemo } from "react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import L from "leaflet";
+import "./App.css";
+import { loadEvents } from "./utils/eventsStore";
+import { flagMap } from "./flagMap";
 
 // Custom parkrun marker icon
 const parkrunIcon = new L.Icon({
@@ -24,53 +17,42 @@ const parkrunIcon = new L.Icon({
 
 const getCountryName = (countryCode) => {
   const names = {
-    EN: 'England',
-    SC: 'Scotland',
-    WA: 'Wales',
-    NI: 'Northern Ireland',
-    DK: 'Denmark',
-    DE: 'Germany',
-    AT: 'Austria',
-    NL: 'Netherlands',
-    IT: 'Italy',
-    SE: 'Sweden',
-    US: 'United States',
-    PL: 'Poland',
+    EN: "England",
+    SC: "Scotland",
+    WA: "Wales",
+    NI: "Northern Ireland",
+    DK: "Denmark",
+    DE: "Germany",
+    AT: "Austria",
+    NL: "Netherlands",
+    IT: "Italy",
+    SE: "Sweden",
+    US: "United States",
+    PL: "Poland"
   };
   return names[countryCode] || countryCode;
 };
 
 export default function MapPage() {
-  const myParkruns = loadRuns();
-  const parkrunLocations = loadLocations();
+  const events = loadEvents();
 
   const stats = useMemo(() => {
-    const totalRuns = myParkruns.reduce((sum, pr) => sum + pr.runs, 0);
-    const uniqueEvents = myParkruns.length;
+    const totalRuns = events.reduce((sum, ev) => sum + (ev.runs || 0), 0);
+    const uniqueEvents = events.length;
 
     const countriesVisited = [];
     const seen = new Set();
-    myParkruns.forEach(pr => {
-      if (!seen.has(pr.country)) {
-        seen.add(pr.country);
-        countriesVisited.push(pr.country);
+    events.forEach((ev) => {
+      if (!seen.has(ev.country)) {
+        seen.add(ev.country);
+        countriesVisited.push(ev.country);
       }
     });
 
     return { totalRuns, uniqueEvents, countriesVisited };
-  }, [myParkruns]);
+  }, [events]);
 
-  const markers = useMemo(
-    () =>
-      myParkruns
-        .map((pr) => {
-          const loc = parkrunLocations[pr.eventCode];
-          if (!loc) return null;
-          return { ...pr, ...loc };
-        })
-        .filter(Boolean),
-    [myParkruns, parkrunLocations]
-  );
+  const markers = events.filter((ev) => ev.lat && ev.lng);
 
   const mapCenter = useMemo(() => {
     if (markers.length === 0) return [54.98, -1.61];
@@ -83,7 +65,7 @@ export default function MapPage() {
     <div className="App">
       <header className="App-header">
         <h1>
-          My parkrun Map{' '}
+          My parkrun Map{" "}
           {stats.countriesVisited.map((code) => (
             <img
               key={code}
@@ -116,29 +98,31 @@ export default function MapPage() {
           center={mapCenter}
           zoom={5}
           scrollWheelZoom={true}
-          style={{ height: '100%', width: '100%' }}
+          style={{ height: "100%", width: "100%" }}
         >
           <TileLayer
             attribution="© OpenStreetMap contributors"
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
-          {markers.map((marker) => (
+          {markers.map((ev) => (
             <Marker
-              key={marker.eventCode}
-              position={[marker.lat, marker.lng]}
+              key={ev.eventCode}
+              position={[ev.lat, ev.lng]}
               icon={parkrunIcon}
             >
               <Popup>
                 <div style={{ textAlign: "left" }}>
-                  <strong>{marker.name}</strong>
-                  <br /><br />
-                  Runs completed: {marker.runs}
+                  <strong>{ev.name}</strong> ({getCountryName(ev.country)})
                   <br />
-                  Best time: {marker.bestTime}
-                  <br /><br />
+                  <br />
+                  Runs completed: {ev.runs ?? 0}
+                  <br />
+                  Best time: {ev.bestTime || "—"}
+                  <br />
+                  <br />
                   <a
-                    href={`https://www.parkrun.org.uk/${marker.eventCode}/`}
+                    href={`https://www.parkrun.org.uk/${ev.eventCode}/`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="event-button"
